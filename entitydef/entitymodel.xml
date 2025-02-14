@@ -29,22 +29,28 @@ under the License.
         <member-entity entity-alias="PTY" entity-name="Party"/>
         <member-entity entity-alias="PSN" entity-name="Person"/>
         <member-entity entity-alias="PROLE" entity-name="PartyRole"/>
+        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
         <member-entity entity-alias="CTM" entity-name="ContactMech"/>
         <member-entity entity-alias="TN" entity-name="TelecomNumber"/>
         <member-entity entity-alias="PA" entity-name="PostalAddress"/>
-        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
 
         <alias name="partyId" entity-alias="PTY" field="partyId"/>
         <alias name="firstName" entity-alias="PSN" field="firstName"/>
         <alias name="lastName" entity-alias="PSN" field="lastName"/>
+
         <alias name="roleTypeId" entity-alias="PROLE" field="roleTypeId"/>
+
+        <alias name="fromDate" entity-alias="PCM" field="fromDate"/>
+        <alias name="thruDate" entity-alias="PCM" field="thruDate"/>
+
         <alias name="emailAddress" entity-alias="CTM" field="infoString"/>
+
         <alias name="contactNumber" entity-alias="TN" field="contactNumber"/>
+
         <alias name="address1" entity-alias="PA" field="address1"/>
         <alias name="city" entity-alias="PA" field="city"/>
         <alias name="postalCode" entity-alias="PA" field="postalCode"/>
-        <alias name="fromDate" entity-alias="PCM" field="fromDate"/>
-        <alias name="thruDate" entity-alias="PCM" field="thruDate"/>
+
         <view-link entity-alias="PTY" rel-entity-alias="PSN">
             <key-map field-name="partyId"/>
         </view-link>
@@ -58,10 +64,10 @@ under the License.
             <key-map field-name="contactMechId"/>
             <entity-condition filter-by-date="true"/>
         </view-link>
-        <view-link entity-alias="PCM" rel-entity-alias="TN">
+        <view-link entity-alias="CTM" rel-entity-alias="TN">
             <key-map field-name="contactMechId"/>
         </view-link>
-        <view-link entity-alias="PCM" rel-entity-alias="PA">
+        <view-link entity-alias="CTM" rel-entity-alias="PA">
             <key-map field-name="contactMechId"/>
         </view-link>
         <entity-condition>
