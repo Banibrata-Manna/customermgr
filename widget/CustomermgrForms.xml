@@ -20,6 +20,11 @@ under the License.
 
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://ofbiz.apache.org/Widget-Form" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Form http://ofbiz.apache.org/dtds/widget-form.xsd">
-
+  <form name="CreateCustomer" type="single" target="createNewCustomer">
+    <!--    <auto-fields-entity entity-name="Person"/>-->
+    <field name="emailAddress" entity-name="ContactMech" field-name="infoString"/>
+    <field name="firstName" field-name="firstName" entity-name="Person"/>
+    <field name="lastName" entity-name="Person" field-name="lastName"/>
+  </form>
 
 </forms>

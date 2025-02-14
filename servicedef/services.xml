@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -20,14 +20,13 @@ under the License.
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://ofbiz.apache.org/dtds/services.xsd">
-    <description>Customermgr Services</description>
-    <vendor></vendor>
-    <version>1.0</version>
 
-    <service name="noSyntaxError" engine="interface">
-        <description>
-            Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
-        </description>
-    </service> 
-    
+    <service name="createCustomer" engine="java"
+             location="com.hotwax.services.CustomerService"
+             invoke="createCustomer">
+        <attribute name="emailAddress" type="String" mode="IN"/>
+        <auto-attributes mode="IN" entity-name="Person" include="nonpk" optional="true"/>
+        <override name="firstName" entity-name="Person" optional="false"/>
+        <override name="lastName" entity-name="Person" optional="false"/>
+    </service>
 </services>
