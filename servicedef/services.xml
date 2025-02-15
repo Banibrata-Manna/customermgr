@@ -29,4 +29,19 @@ under the License.
         <override name="firstName" entity-name="Person" optional="false"/>
         <override name="lastName" entity-name="Person" optional="false"/>
     </service>
+
+    <service name="findCustomers" engine="java"
+             location="com.hotwax.services.CustomerService"
+             invoke="findCustomers">
+        <attribute name="firstName" type="String" optional="true" mode="IN"/>
+        <attribute name="lastName" type="String" optional="true" mode="IN"/>
+        <attribute name="emailAddress" type="String" optional="true" mode="IN"/>
+        <attribute name="contactNumber" type="String" optional="true" mode="IN"/>
+        <attribute name="address1" type="String" optional="true" mode="IN"/>
+        <attribute name="city" type="String" optional="true" mode="IN"/>
+        <attribute name="postalCode" type="String" optional="true" mode="IN"/>
+
+        <attribute name="customersList" type="List" optional="false" mode="OUT"/>
+    </service>
+
 </services>

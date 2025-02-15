@@ -36,4 +36,34 @@ under the License.
         </section>
     </screen>
 
+    <screen name="SearchCustomers">
+        <section>
+            <actions>
+                <set field="headerItem" value="SearchCustomers"/>
+                <set field="titleProperty" value="Search Customers"/>
+                <script location="component://customermgr/groovyScripts/crud/SetCustomerList.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <screenlet title="Find Customer">
+                            <platform-specific>
+                                <html>
+                                    <html-template location="component://customermgr/template/SearchCustomer.ftl"/>
+                                </html>
+                            </platform-specific>
+                        </screenlet>
+                        <screenlet title="Search Results">
+                            <platform-specific>
+                                <html>
+                                    <html-template location="component://customermgr/template/ListCustomer.ftl"/>
+                                </html>
+                            </platform-specific>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
 </screens>

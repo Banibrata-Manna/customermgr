@@ -33,4 +33,26 @@ under the License.
     <property key="CustomermgrViewPermissionError">
         <value xml:lang="en">You are not allowed to view this page.</value>
     </property>
+
+    <property key="CustomermgrFirstName">
+        <value xml:lang="en">First Name</value>
+    </property>
+    <property key="CustomermgrLastName">
+        <value xml:lang="en">Last Name</value>
+    </property>
+    <property key="CustomermgrEmailAddress">
+        <value xml:lang="en">Email Address</value>
+    </property>
+    <property key="CustomermgrContactNumber">
+        <value xml:lang="en">Contact Number</value>
+    </property>
+    <property key="CustomermgrAddress">
+        <value xml:lang="en">Address1</value>
+    </property>
+    <property key="CustomermgrCity">
+        <value xml:lang="en">City</value>
+    </property>
+    <property key="CustomermgrPostalCode">
+        <value xml:lang="en">Postal Code</value>
+    </property>
 </resource>

@@ -1,27 +1,27 @@
 <div class="screenlet-body">
-  <#if customerList?has_content>
-    <table cellspacing=0 cellpadding=2 border=0 class="basic-table">
+  <#if customersList?has_content>
+    <table cellspacing=0 cellpadding=2 border=10 class="basic-table">
       <thead><tr>
-        <th>partyId</th>
-        <th>firstName</th>
-        <th>lastName</th>
-        <th>Email Address</th>
-        <th>Contact Number</th>
-        <th>Address</th>
-        <th>City</th>
-        <th>Postal Code</th>
+        <th border=1>partyId</th>
+        <th border=1>firstName</th>
+        <th border=1>lastName</th>
+        <th border=1>Email Address</th>
+        <th border=1>Contact Number</th>
+        <th border=1>Address</th>
+        <th border=1>City</th>
+        <th border=1>Postal Code</th>
       </tr></thead>
       <tbody>
-        <#list customerList as customer>
+        <#list customersList as customer>
           <tr>
             <td>${customer.partyId}</td>
-            <td>${customer.firstName?default("NA")}</td>
-            <td>${customer.lastName?default("NA")}</td>
-            <td>${customer.emailAddress}</td>
-            <td>${customer.contactNumber}</td>
-            <td>${customer.address1}</td>
-            <td>${customer.city}</td>
-            <td>${customer.postalCode}</td>
+            <td>${customer.firstName?default("")}</td>
+            <td>${customer.lastName?default("")}</td>
+            <td>${customer.emailAddress?default("")}</td>
+            <td>${customer.contactNumber?default("")}</td>
+            <td>${customer.address1?default("")}</td>
+            <td>${customer.city?default("")}</td>
+            <td>${customer.postalCode?default("")}</td>
           </tr>
         </#list>
        </tbody>

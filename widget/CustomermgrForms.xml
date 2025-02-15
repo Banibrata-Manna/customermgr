@@ -29,4 +29,12 @@ under the License.
     <field name="submitButton" title="${uiLabelMap.CommonAdd}"><submit button-type="button"/></field>
   </form>
 
+  <form name="FindCustomer" type="single" target="findCustomers">
+    <auto-fields-service service-name="findCustomers"/>
+    <field name="submitButton" title="${uiLabelMap.CommonFind}"><submit button-type="button"/></field>
+  </form>
+
+  <form name="listCustomerByFilters" type="list" >
+
+  </form>
 </forms>
