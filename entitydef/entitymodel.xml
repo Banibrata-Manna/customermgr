@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
--->
 
 <entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://ofbiz.apache.org/dtds/entitymodel.xsd">
@@ -25,11 +7,12 @@ under the License.
     <!-- ========================================================= -->
     <title>Entity of Customermgr Component</title>
     <description>None</description>
-    <view-entity entity-name="FindCustomerView" package-name="org.apache.ofbiz.party.party">
+    <view-entity entity-name="FindCustomerView" package-name="custom">
         <member-entity entity-alias="PTY" entity-name="Party"/>
         <member-entity entity-alias="PSN" entity-name="Person"/>
         <member-entity entity-alias="PROLE" entity-name="PartyRole"/>
         <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="PCMP" entity-name="PartyContactMechPurpose"/>
         <member-entity entity-alias="CTM" entity-name="ContactMech"/>
         <member-entity entity-alias="TN" entity-name="TelecomNumber"/>
         <member-entity entity-alias="PA" entity-name="PostalAddress"/>
@@ -42,6 +25,10 @@ under the License.
 
         <alias name="fromDate" entity-alias="PCM" field="fromDate"/>
         <alias name="thruDate" entity-alias="PCM" field="thruDate"/>
+
+        <alias name="contactMechPurposeTypeId" entity-alias="PCMP" field="contactMechPurposeTypeId"/>
+        <alias name="pFromDate" entity-alias="PCMP" field="fromDate"/>
+        <alias name="pThruDate" entity-alias="PCMP" field="thruDate"/>
 
         <alias name="emailAddress" entity-alias="CTM" field="infoString"/>
 
@@ -64,14 +51,22 @@ under the License.
             <key-map field-name="contactMechId"/>
             <entity-condition filter-by-date="true"/>
         </view-link>
-        <view-link entity-alias="CTM" rel-entity-alias="TN">
+        <view-link entity-alias="PCM" rel-entity-alias="PCMP">
+            <key-map field-name="partyId"/>
+            <key-map field-name="contactMechId"/>
+            <entity-condition filter-by-date="true"/>
+        </view-link>
+        <view-link entity-alias="CTM" rel-entity-alias="TN" rel-optional="true">
             <key-map field-name="contactMechId"/>
         </view-link>
-        <view-link entity-alias="CTM" rel-entity-alias="PA">
+        <view-link entity-alias="CTM" rel-entity-alias="PA" rel-optional="true">
             <key-map field-name="contactMechId"/>
         </view-link>
         <entity-condition>
-            <condition-expr entity-alias="PROLE" field-name="roleTypeId" operator="equals" value="CUSTOMER"/>
+            <condition-list combine="and">
+                <condition-expr entity-alias="PROLE" field-name="roleTypeId" operator="equals" value="CUSTOMER"/>
+                <condition-expr entity-alias="PCMP" field-name="contactMechPurposeTypeId" operator="equals" value="PRIMARY_EMAIL"/>
+            </condition-list>
         </entity-condition>
     </view-entity>
 </entitymodel>
