@@ -14,6 +14,7 @@
       <tbody>
         <#list customersList as customer>
           <tr>
+            <td><a href="<@ofbizUrl>UpdateCustomer?customerId=${customer.partyId}</@ofbizUrl>">Update</a></td>
             <td>${customer.partyId}</td>
             <td>${customer.firstName?default("")}</td>
             <td>${customer.lastName?default("")}</td>

@@ -41,6 +41,8 @@ public class CustomerService{
       String partyId;
       partyId = (String) existingParty.get(0).get("partyId");
 
+      Debug.logInfo("/////////////////////////" + partyId + "///////////////////////", MODULE);
+
       EntityCondition partyIdCond = EntityCondition.makeCondition("partyId", partyId);
 
       EntityCondition pos = EntityCondition.makeCondition("contactMechPurposeTypeId",
@@ -75,6 +77,7 @@ public class CustomerService{
           pcmpsCond, null, null, null, false);
 
       List<GenericValue> pcms = new ArrayList<>();
+      int rowsAffected = 0;
       for(GenericValue pcmp : pcmps) {
         GenericValue pcm = delegator.findOne("PartyContactMech",
             UtilMisc.toMap("partyId", pcmp.get("partyId"),
@@ -83,11 +86,48 @@ public class CustomerService{
         pcmp.set("thruDate", now);
         pcm.set("thruDate", now);
 
-        int rowsAffected = delegator.store(pcmp);
+        rowsAffected = delegator.store(pcmp);
         rowsAffected += delegator.store(pcm);
+      }
+
+      if(rowsAffected > 0){
+        if(!UtilValidate.isEmpty(context.get("contactNumber"))){
+          GenericValue contactMech;
+          GenericValue partyContactMech;
+          GenericValue partyContactMechPurpose;
+          Debug.logInfo((String) context.get("contactNumber"), MODULE);
+          Debug.logInfo("///////////////////////// Reached Telecom ////////////////////////", MODULE);
+
+          contactMech = delegator.makeValue("ContactMech");
+          contactMech.setNextSeqId();
+          contactMech.setNonPKFields(UtilMisc.toMap("contactMechTypeId", "TELECOM_NUMBER"));
+          contactMech = delegator.create(contactMech);
+
+          GenericValue telecomNumber = delegator.makeValue("TelecomNumber");
+          telecomNumber.setPKFields(UtilMisc.toMap("contactMechId",
+              contactMech.get("contactMechId")));
+          telecomNumber.setNonPKFields(context);
+
+          telecomNumber = delegator.create(telecomNumber);
+
+          Debug.logInfo(telecomNumber.toString(), MODULE);
+
+          partyContactMech = delegator.makeValue("PartyContactMech");
+          partyContactMech.setPKFields(UtilMisc.toMap("partyId", partyId,
+              "contactMechId", contactMech.get("contactMechId"), "fromDate", now,
+              "roleTypeId", "CUSTOMER"));
+          partyContactMech = delegator.create(partyContactMech);
+
+          partyContactMechPurpose = delegator.makeValue("PartyContactMechPurpose");
+          partyContactMechPurpose.setPKFields(UtilMisc.toMap("partyId", partyId,
+              "contactMechId", contactMech.get("contactMechId"), "fromDate", now,
+              "contactMechPurposeTypeId", "PRIMARY_PHONE"));
+          partyContactMechPurpose = delegator.create(partyContactMechPurpose);
+        }
       }
     }catch (Exception e) {
       Debug.logError(e, MODULE);
+      return ServiceUtil.returnError("Failed to update records " + MODULE);
     }
     return result;
   }
