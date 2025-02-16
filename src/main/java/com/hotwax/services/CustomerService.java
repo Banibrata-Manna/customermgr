@@ -20,6 +20,52 @@ import org.apache.ofbiz.service.ServiceUtil;
 public class CustomerService{
   public static final String MODULE = CustomerService.class.getName();
 
+  public static Map<String, Object> updateCustomer(DispatchContext dispatchContext, Map<String, ? extends Object> context){
+    Map<String, Object> result = ServiceUtil.returnSuccess();
+    Delegator delegator = dispatchContext.getDelegator();
+    Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+    LocalDispatcher dispatcher = dispatchContext.getDispatcher();
+    Debug.logInfo("///////////////////////// Reached Update Service ////////////////////////", MODULE);
+    try{
+
+      Map<String, Object> ifExists = dispatcher.runSync("findCustomers",
+          UtilMisc.toMap("emailAddress",
+              context.get("emailAddress")));
+
+      if(existingParty.isEmpty()) return result;
+
+      List<EntityCondition> conditionList = new ArrayList<>();
+
+        conditionList.add(
+            EntityCondition.makeCondition("partyId", customer.get("partyId"))
+        );
+
+//      if(UtilValidate.isEmpty(context.get("postalCode"))){
+//
+//        List<EntityCondition> conditionList = new ArrayList<>();
+//
+//        conditionList.add(
+//            EntityCondition.makeCondition("partyId", customer.get("partyId"))
+//        );
+//
+//        conditionList.add(
+//            EntityCondition.makeCondition("contactMechId", customer.get("contactMechId"))
+//        );
+//
+//        List<GenericValue> pcms = delegator.findList("PartyContactMech",
+//            EntityCondition.makeCondition(conditionList, EntityOperator.AND),
+//            null, null, null, false);
+//
+//        List<GenericValue> pcmps = delegator.findList("PartyContactMechPurpose",
+//            EntityCondition.makeCondition(conditionList, EntityOperator.AND),
+//            null, null, null, false);
+//      }
+    }catch (Exception e) {
+      Debug.logError(e, MODULE);
+    }
+    return result;
+  }
+
   public static Map<String, Object> findCustomers(DispatchContext dispatchContext, Map<String, ? extends Object> context) {
     Map<String, Object> result = ServiceUtil.returnSuccess();
     Delegator delegator = dispatchContext.getDelegator();
