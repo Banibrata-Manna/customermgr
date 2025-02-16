@@ -25,9 +25,9 @@ under the License.
              location="com.hotwax.services.CustomerService"
              invoke="createCustomer">
         <attribute name="emailAddress" type="String" mode="IN"/>
-        <auto-attributes mode="IN" entity-name="Person" include="nonpk" optional="true"/>
-        <override name="firstName" entity-name="Person" optional="false"/>
-        <override name="lastName" entity-name="Person" optional="false"/>
+        <auto-attributes mode="IN" entity-name="FindCustomerView" include="nonpk" optional="true"/>
+        <override name="firstName" entity-name="FindCustomerView" optional="false"/>
+        <override name="lastName" entity-name="FindCustomerView" optional="false"/>
     </service>
 
     <service name="findCustomers" engine="java"

@@ -56,16 +56,16 @@
             <key-map field-name="contactMechId"/>
             <entity-condition filter-by-date="true"/>
         </view-link>
-        <view-link entity-alias="CTM" rel-entity-alias="TN" rel-optional="true">
+        <view-link entity-alias="PCM" rel-entity-alias="TN" rel-optional="true">
             <key-map field-name="contactMechId"/>
         </view-link>
-        <view-link entity-alias="CTM" rel-entity-alias="PA" rel-optional="true">
+        <view-link entity-alias="PCM" rel-entity-alias="PA" rel-optional="true">
             <key-map field-name="contactMechId"/>
         </view-link>
         <entity-condition>
             <condition-list combine="and">
                 <condition-expr entity-alias="PROLE" field-name="roleTypeId" operator="equals" value="CUSTOMER"/>
-                <condition-expr entity-alias="PCMP" field-name="contactMechPurposeTypeId" operator="equals" value="PRIMARY_EMAIL"/>
+                <condition-expr entity-alias="PCMP" field-name="contactMechPurposeTypeId" operator="like" value="%PRIMARY%"/>
             </condition-list>
         </entity-condition>
     </view-entity>
