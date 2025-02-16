@@ -17,6 +17,8 @@ import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.ServiceUtil;
 
+import javax.swing.text.html.parser.Entity;
+
 public class CustomerService{
   public static final String MODULE = CustomerService.class.getName();
 
@@ -32,34 +34,58 @@ public class CustomerService{
           UtilMisc.toMap("emailAddress",
               context.get("emailAddress")));
 
-      if(existingParty.isEmpty()) return result;
+      List<GenericValue> existingParty = (List)ifExists.get("customersList");
+
+      if(!existingParty.isEmpty()) return result;
+
+      String partyId;
+      partyId = (String) existingParty.get(0).get("partyId");
+
+      EntityCondition partyIdCond = EntityCondition.makeCondition("partyId", partyId);
+
+      EntityCondition pos = EntityCondition.makeCondition("contactMechPurposeTypeId",
+          "PRIMARY_LOCATION");
+      EntityCondition tele = EntityCondition.makeCondition("contactMechPurposeTypeId",
+          "PRIMARY_PHONE");
+
+      EntityCondition purposeCondition = EntityCondition.makeCondition(pos,
+          EntityOperator.OR, tele);
+
+      EntityCondition dateCondition = EntityCondition.makeConditionDate("fromDate", "thruDate");
 
       List<EntityCondition> conditionList = new ArrayList<>();
 
-        conditionList.add(
-            EntityCondition.makeCondition("partyId", customer.get("partyId"))
-        );
+      conditionList.add(partyIdCond);
+      if(UtilValidate.isNotEmpty(context.get("postalAddress"))
+            &&
+          UtilValidate.isEmpty(context.get("telecomNumber"))) conditionList.add(pos);
 
-//      if(UtilValidate.isEmpty(context.get("postalCode"))){
-//
-//        List<EntityCondition> conditionList = new ArrayList<>();
-//
-//        conditionList.add(
-//            EntityCondition.makeCondition("partyId", customer.get("partyId"))
-//        );
-//
-//        conditionList.add(
-//            EntityCondition.makeCondition("contactMechId", customer.get("contactMechId"))
-//        );
-//
-//        List<GenericValue> pcms = delegator.findList("PartyContactMech",
-//            EntityCondition.makeCondition(conditionList, EntityOperator.AND),
-//            null, null, null, false);
-//
-//        List<GenericValue> pcmps = delegator.findList("PartyContactMechPurpose",
-//            EntityCondition.makeCondition(conditionList, EntityOperator.AND),
-//            null, null, null, false);
-//      }
+      if(UtilValidate.isNotEmpty(context.get("telecomNumber"))
+          &&
+          UtilValidate.isEmpty(context.get("postalAddress"))) conditionList.add(tele);
+
+      if(UtilValidate.isNotEmpty(context.get("telecomNumber"))
+          &&
+          UtilValidate.isEmpty(context.get("postalAddress"))) conditionList.add(purposeCondition);
+      conditionList.add(dateCondition);
+
+      EntityCondition pcmpsCond = EntityCondition.makeCondition(conditionList);
+
+      List<GenericValue> pcmps = delegator.findList("PartyContactMechPurpose",
+          pcmpsCond, null, null, null, false);
+
+      List<GenericValue> pcms = new ArrayList<>();
+      for(GenericValue pcmp : pcmps) {
+        GenericValue pcm = delegator.findOne("PartyContactMech",
+            UtilMisc.toMap("partyId", pcmp.get("partyId"),
+                "contactMechId", pcmp.get("contactMechId")), false);
+
+        pcmp.set("thruDate", now);
+        pcm.set("thruDate", now);
+
+        int rowsAffected = delegator.store(pcmp);
+        rowsAffected += delegator.store(pcm);
+      }
     }catch (Exception e) {
       Debug.logError(e, MODULE);
     }
