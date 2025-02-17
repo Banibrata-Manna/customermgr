@@ -60,7 +60,17 @@ under the License.
         <event type="service" invoke="findCustomers"/>
         <response name="success" type="view" value="SearchCustomers"/>
     </request-map>
+    <request-map uri="UpdateCustomer">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="UpdateCustomer"/>
+    </request-map>
+    <request-map uri="updateCustomer">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateCustomer"/>
+        <response name="success" type="view" value="UpdateCustomer"/>
+    </request-map>
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://customermgr/widget/CustomermgrScreens.xml#main"/>
     <view-map name="SearchCustomers" type="screen" page="component://customermgr/widget/CustomermgrScreens.xml#SearchCustomers"/>
+    <view-map name="UpdateCustomer" type="screen" page="component://customermgr/widget/CustomermgrScreens.xml#UpdateCustomer"/>
 </site-conf>

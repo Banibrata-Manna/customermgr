@@ -36,7 +36,13 @@ public class CustomerService{
 
       List<GenericValue> existingParty = (List)ifExists.get("customersList");
 
-      if(!existingParty.isEmpty()) return result;
+      Debug.logInfo("|||||||||||||||||||||||||||||||||" + existingParty.toString() + "||||||||||||||||||||||||||||",
+          MODULE);
+
+      if(existingParty.isEmpty()) return result;
+
+      Debug.logInfo("|||||||||||||||||||||||||||||||||" + existingParty.toString() + "||||||||||||||||||||||||||||",
+          MODULE);
 
       String partyId;
       partyId = (String) existingParty.get(0).get("partyId");
@@ -59,7 +65,7 @@ public class CustomerService{
 
       conditionList.add(partyIdCond);
       if(UtilValidate.isNotEmpty(context.get("postalAddress"))
-            &&
+          &&
           UtilValidate.isEmpty(context.get("telecomNumber"))) conditionList.add(pos);
 
       if(UtilValidate.isNotEmpty(context.get("telecomNumber"))
@@ -76,20 +82,43 @@ public class CustomerService{
       List<GenericValue> pcmps = delegator.findList("PartyContactMechPurpose",
           pcmpsCond, null, null, null, false);
 
-      List<GenericValue> pcms = new ArrayList<>();
+      conditionList.remove(purposeCondition);
+
+      pcmpsCond = EntityCondition.makeCondition(conditionList);
+
+      List<GenericValue> pcms = delegator.findList("PartyContactMech", pcmpsCond,
+          null, null, null, false);
+
+      Debug.logInfo("///////////////////////////" + pcmps + "/////////////////////////", MODULE);
+      Debug.logInfo("///////////////////////////" + pcms + "/////////////////////////", MODULE);
+
       int rowsAffected = 0;
+
+      String emailcmtId = null;
+
       for(GenericValue pcmp : pcmps) {
-        GenericValue pcm = delegator.findOne("PartyContactMech",
-            UtilMisc.toMap("partyId", pcmp.get("partyId"),
-                "contactMechId", pcmp.get("contactMechId")), false);
-
-        pcmp.set("thruDate", now);
-        pcm.set("thruDate", now);
-
-        rowsAffected = delegator.store(pcmp);
-        rowsAffected += delegator.store(pcm);
+//        GenericValue pcm = delegator.findOne("PartyContactMech",
+//            UtilMisc.toMap("partyId", pcmp.get("partyId"),
+//                "contactMechId", pcmp.get("contactMechId")), false);
+        String purpose = (String) pcmp.get("contactMechPurposeTypeId");
+        if(!purpose.equals("PRIMARY_EMAIL")) {
+          pcmp.set("thruDate", now);
+          rowsAffected += delegator.store(pcmp);
+        } else {
+            emailcmtId = (String) pcmp.get("contactMechId");
+        }
       }
-
+      for(GenericValue pcm : pcms) {
+//        GenericValue pcm = delegator.findOne("PartyContactMech",
+//            UtilMisc.toMap("partyId", pcmp.get("partyId"),
+//                "contactMechId", pcmp.get("contactMechId")), false);
+        String cmtId = (String) pcm.get("contactMechId");
+        if(!cmtId.equals(emailcmtId)){
+          pcm.set("thruDate", now);
+          rowsAffected += delegator.store(pcm);
+        }
+      }
+      Debug.logInfo("/////////////////" + rowsAffected + "//////////////////", MODULE);
       if(rowsAffected > 0){
         if(!UtilValidate.isEmpty(context.get("contactNumber"))){
           GenericValue contactMech;
@@ -122,6 +151,39 @@ public class CustomerService{
           partyContactMechPurpose.setPKFields(UtilMisc.toMap("partyId", partyId,
               "contactMechId", contactMech.get("contactMechId"), "fromDate", now,
               "contactMechPurposeTypeId", "PRIMARY_PHONE"));
+          partyContactMechPurpose = delegator.create(partyContactMechPurpose);
+        }
+
+        if(!UtilValidate.isEmpty(context.get("postalCode"))){
+          GenericValue contactMech;
+          GenericValue partyContactMech;
+          GenericValue partyContactMechPurpose;
+          Debug.logInfo((String) context.get("postalCode"), MODULE);
+          Debug.logInfo("///////////////////////// Reached postal ////////////////////////", MODULE);
+          contactMech = delegator.makeValue("ContactMech");
+          contactMech.setNextSeqId();
+          contactMech.setNonPKFields(UtilMisc.toMap("contactMechTypeId", "POSTAL_ADDRESS"));
+          contactMech = delegator.create(contactMech);
+
+          GenericValue postalAddress = delegator.makeValue("PostalAddress");
+          postalAddress.setPKFields(UtilMisc.toMap("contactMechId",
+              contactMech.get("contactMechId")));
+          postalAddress.setNonPKFields(context);
+
+          postalAddress = delegator.create(postalAddress);
+
+          Debug.logInfo(postalAddress.toString(), MODULE);
+
+          partyContactMech = delegator.makeValue("PartyContactMech");
+          partyContactMech.setPKFields(UtilMisc.toMap("partyId", partyId,
+              "contactMechId", contactMech.get("contactMechId"), "fromDate", now,
+              "roleTypeId", "CUSTOMER"));
+          partyContactMech = delegator.create(partyContactMech);
+
+          partyContactMechPurpose = delegator.makeValue("PartyContactMechPurpose");
+          partyContactMechPurpose.setPKFields(UtilMisc.toMap("partyId", partyId,
+              "contactMechId", contactMech.get("contactMechId"), "fromDate", now,
+              "contactMechPurposeTypeId", "PRIMARY_LOCATION"));
           partyContactMechPurpose = delegator.create(partyContactMechPurpose);
         }
       }

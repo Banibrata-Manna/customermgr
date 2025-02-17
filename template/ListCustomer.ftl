@@ -2,6 +2,7 @@
   <#if customersList?has_content>
     <table cellspacing=0 cellpadding=2 border=10 class="basic-table">
       <thead><tr>
+        <th border=1></th>
         <th border=1>partyId</th>
         <th border=1>firstName</th>
         <th border=1>lastName</th>
@@ -14,7 +15,7 @@
       <tbody>
         <#list customersList as customer>
           <tr>
-            <td><a href="<@ofbizUrl>UpdateCustomer?customerId=${customer.partyId}</@ofbizUrl>">Update</a></td>
+            <td><a href="<@ofbizUrl>UpdateCustomer</@ofbizUrl>">Update</a></td>
             <td>${customer.partyId}</td>
             <td>${customer.firstName?default("")}</td>
             <td>${customer.lastName?default("")}</td>

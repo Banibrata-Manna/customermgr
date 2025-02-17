@@ -44,4 +44,13 @@ under the License.
         <attribute name="customersList" type="List" optional="false" mode="OUT"/>
     </service>
 
+    <service name="updateCustomer" engine="java"
+             location="com.hotwax.services.CustomerService"
+             invoke="updateCustomer">
+        <attribute name="emailAddress" type="String" mode="IN"/>
+        <attribute name="contactNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="address1" type="String" mode="IN" optional="true"/>
+        <attribute name="city" type="String" mode="IN" optional="true"/>
+        <attribute name="postalCode" type="String" mode="IN" optional="true"/>
+    </service>
 </services>
