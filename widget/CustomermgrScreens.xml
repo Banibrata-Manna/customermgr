@@ -86,17 +86,30 @@ under the License.
             </widgets>
         </section>
     </screen>
-    <screen name="ManageCustomerRelationship">
+    <screen name="CreateCustomerRelationship">
         <section>
             <actions>
-                <set field="headerItem" value="CreateCustomerRelationship"/>
-                <set field="titleProperty" value="Create CustomerRelationship"/>
+                <set field="headerItem" value="ManageCustomerRelationship"/>
+                <set field="titleProperty" value="Manage Customer Relationship"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
                         <include-form name="CreateCustomerRelationship" location="component://customermgr/widget/CustomermgrForms.xml"/>
                     </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="UpdateCustomerRelationship">
+        <section>
+            <actions>
+                <set field="headerItem" value="ManageCustomerRelationship"/>
+                <set field="titleProperty" value="Manage Customer Relationship"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
                         <include-form name="UpdateCustomerRelationship" location="component://customermgr/widget/CustomermgrForms.xml"/>
                     </decorator-section>

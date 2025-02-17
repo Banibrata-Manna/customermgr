@@ -387,8 +387,7 @@ public class CustomerService{
           .from("PartyRelationship")
           .where(UtilMisc.toMap("partyIdFrom", context.get("partyIdFrom"),
               "partyIdTo", context.get("partyIdTo"), "roleTypeIdFrom", "ORGANIZATION_ROLE",
-              "roleTypeIdTo", "CUSTOMER", "statusId", "ACCOUNT_CREATED"))
-          .filterByDate();
+              "roleTypeIdTo", "CUSTOMER", "statusId", "ACCOUNT_CREATED"));
 
       GenericValue ifExists = entityQuery.queryOne();
 
@@ -417,24 +416,23 @@ public class CustomerService{
     try {
       entityQuery = entityQuery.select("partyIdFrom",
               "partyIdTo", "roleTypeIdTo",
-              "roleTypeIdFrom", "fromDate", "thruDate", "statusId")
+              "roleTypeIdFrom", "fromDate", "thruDate", "statusId", "partyRelationshipTypeId")
           .from("PartyRelationship")
           .where(UtilMisc.toMap("partyIdFrom", context.get("partyIdFrom"),
-              "partyIdTo", context.get("partyIdTo"), "roleTypeIdFrom", "ORGANIZATION_ROLE",
-              "roleTypeIdTo", "CUSTOMER", "statusId", "ACCOUNT_CREATED"))
-          .filterByDate();
+              "partyIdTo", context.get("partyIdTo"),
+              "roleTypeIdFrom", "ORGANIZATION_ROLE",
+              "roleTypeIdTo", "CUSTOMER",
+              "partyRelationshipTypeId", context.get("partyRelationshipTypeId")));
 
       GenericValue ifExists = entityQuery.queryOne();
 
-      if(!UtilValidate.isEmpty(ifExists)) return result;
+      Debug.logInfo( "|||||||||||||||||||||||||"+ ifExists + "|||||||||||||||||||||||||||||", MODULE);
 
-      GenericValue partyRelationship = delegator.makeValue("PartyRelationship");
-      partyRelationship.setFields(UtilMisc.toMap("partyIdFrom", context.get("partyIdFrom"),
-          "partyIdTo", context.get("partyIdTo"), "roleTypeIdFrom", "ORGANIZATION_ROLE",
-          "roleTypeIdTo", "CUSTOMER", "fromDate", now, "thruDate",
-          Timestamp.valueOf(LocalDateTime.now()), "statusId", "ACCOUNT_CREATED",
-          "partyRelationshipTypeId", context.get("partyRelationshipTypeId")));
-      partyRelationship = delegator.create(partyRelationship);
+      if(UtilValidate.isEmpty(ifExists)) return result;
+
+      GenericValue partyRelationship = ifExists;
+      partyRelationship.set("statusId", context.get("statusId"));
+      delegator.store(partyRelationship);
     } catch (GenericEntityException e) {
       Debug.logError(e, MODULE);
       return ServiceUtil.returnError("Failed to create record " + MODULE);

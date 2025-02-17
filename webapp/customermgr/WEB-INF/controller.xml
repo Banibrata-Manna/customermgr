@@ -71,21 +71,21 @@ under the License.
     </request-map>
     <request-map uri="CreateCustomerRelationship">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="ManageCustomerRelationship"/>
+        <response name="success" type="view" value="CreateCustomerRelationship"/>
     </request-map>
     <request-map uri="createCustomerRelationship">
         <security auth="true" https="true"/>
         <event type="service" invoke="createCustomerRelationship"/>
-        <response name="success" type="view" value="ManageCustomerRelationship"/>
+        <response name="success" type="view" value="CreateCustomerRelationship"/>
     </request-map>
     <request-map uri="UpdateCustomerRelationship">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="ManageCustomerRelationship"/>
+        <response name="success" type="view" value="UpdateCustomerRelationship"/>
     </request-map>
     <request-map uri="updateCustomerRelationship">
         <security auth="true" https="true"/>
-        <event type="service" invoke="createCustomerRelationship"/>
-        <response name="success" type="view" value="ManageCustomerRelationship"/>
+        <event type="service" invoke="updateCustomerRelationship"/>
+        <response name="success" type="view" value="UpdateCustomerRelationship"/>
     </request-map>
     <!-- View Mappings -->
     <view-map name="main" type="screen"
@@ -94,6 +94,8 @@ under the License.
               page="component://customermgr/widget/CustomermgrScreens.xml#SearchCustomers"/>
     <view-map name="UpdateCustomer" type="screen"
               page="component://customermgr/widget/CustomermgrScreens.xml#UpdateCustomer"/>
-    <view-map name="ManageCustomerRelationship" type="screen"
-              page="component://customermgr/widget/CustomermgrScreens.xml#ManageCustomerRelationship"/>
+    <view-map name="CreateCustomerRelationship" type="screen"
+              page="component://customermgr/widget/CustomermgrScreens.xml#CreateCustomerRelationship"/>
+    <view-map name="UpdateCustomerRelationship" type="screen"
+              page="component://customermgr/widget/CustomermgrScreens.xml#UpdateCustomerRelationship"/>
 </site-conf>

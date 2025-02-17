@@ -67,6 +67,7 @@ under the License.
              invoke="updateCustomerRelationship">
         <attribute name="partyIdFrom" type="String" mode="IN"/>
         <attribute name="partyIdTo" type="String" mode="IN"/>
+        <attribute name="partyRelationshipTypeId" type="String" mode="IN"/>
         <attribute name="statusId" type="String" mode="IN"/>
     </service>
 </services>

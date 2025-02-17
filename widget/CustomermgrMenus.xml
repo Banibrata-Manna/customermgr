@@ -27,5 +27,8 @@ under the License.
         <menu-item name="CreateCustomerRelationship" title="Create Customer Relationship">
             <link target="CreateCustomerRelationship"/>
         </menu-item>
+        <menu-item name="UpdateCustomerRelationship" title="Update Customer Relationship">
+            <link target="UpdateCustomerRelationship"/>
+        </menu-item>
     </menu>
 </menus>
