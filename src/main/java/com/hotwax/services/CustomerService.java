@@ -13,6 +13,7 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.condition.EntityOperator;
+import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.ServiceUtil;
@@ -367,6 +368,74 @@ public class CustomerService{
         partyContactMechPurpose = delegator.create(partyContactMechPurpose);
       }
     } catch (Exception e) {
+      Debug.logError(e, MODULE);
+      return ServiceUtil.returnError("Failed to create record " + MODULE);
+    }
+    return result;
+  }
+
+  public static Map<String, Object> createCustomerRelationship(DispatchContext dispatchContext, Map<String, ? extends Object> context) {
+    Map<String, Object> result = ServiceUtil.returnSuccess();
+    Delegator delegator = dispatchContext.getDelegator();
+    LocalDispatcher dispatcher = dispatchContext.getDispatcher();
+    Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+    EntityQuery entityQuery = EntityQuery.use(delegator);
+    try {
+      entityQuery = entityQuery.select("partyIdFrom",
+          "partyIdTo", "roleTypeIdTo",
+          "roleTypeIdFrom", "fromDate", "thruDate", "statusId")
+          .from("PartyRelationship")
+          .where(UtilMisc.toMap("partyIdFrom", context.get("partyIdFrom"),
+              "partyIdTo", context.get("partyIdTo"), "roleTypeIdFrom", "ORGANIZATION_ROLE",
+              "roleTypeIdTo", "CUSTOMER", "statusId", "ACCOUNT_CREATED"))
+          .filterByDate();
+
+      GenericValue ifExists = entityQuery.queryOne();
+
+      if(!UtilValidate.isEmpty(ifExists)) return result;
+
+      GenericValue partyRelationship = delegator.makeValue("PartyRelationship");
+      partyRelationship.setFields(UtilMisc.toMap("partyIdFrom", context.get("partyIdFrom"),
+          "partyIdTo", context.get("partyIdTo"), "roleTypeIdFrom", "ORGANIZATION_ROLE",
+          "roleTypeIdTo", "CUSTOMER", "fromDate", now, "thruDate",
+          Timestamp.valueOf(LocalDateTime.now()), "statusId", "ACCOUNT_CREATED",
+          "partyRelationshipTypeId", context.get("partyRelationshipTypeId")));
+      partyRelationship = delegator.create(partyRelationship);
+    } catch (GenericEntityException e) {
+      Debug.logError(e, MODULE);
+      return ServiceUtil.returnError("Failed to create record " + MODULE);
+    }
+    return result;
+  }
+
+  public static Map<String, Object> updateCustomerRelationship(DispatchContext dispatchContext, Map<String, ? extends Object> context) {
+    Map<String, Object> result = ServiceUtil.returnSuccess();
+    Delegator delegator = dispatchContext.getDelegator();
+    LocalDispatcher dispatcher = dispatchContext.getDispatcher();
+    Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+    EntityQuery entityQuery = EntityQuery.use(delegator);
+    try {
+      entityQuery = entityQuery.select("partyIdFrom",
+              "partyIdTo", "roleTypeIdTo",
+              "roleTypeIdFrom", "fromDate", "thruDate", "statusId")
+          .from("PartyRelationship")
+          .where(UtilMisc.toMap("partyIdFrom", context.get("partyIdFrom"),
+              "partyIdTo", context.get("partyIdTo"), "roleTypeIdFrom", "ORGANIZATION_ROLE",
+              "roleTypeIdTo", "CUSTOMER", "statusId", "ACCOUNT_CREATED"))
+          .filterByDate();
+
+      GenericValue ifExists = entityQuery.queryOne();
+
+      if(!UtilValidate.isEmpty(ifExists)) return result;
+
+      GenericValue partyRelationship = delegator.makeValue("PartyRelationship");
+      partyRelationship.setFields(UtilMisc.toMap("partyIdFrom", context.get("partyIdFrom"),
+          "partyIdTo", context.get("partyIdTo"), "roleTypeIdFrom", "ORGANIZATION_ROLE",
+          "roleTypeIdTo", "CUSTOMER", "fromDate", now, "thruDate",
+          Timestamp.valueOf(LocalDateTime.now()), "statusId", "ACCOUNT_CREATED",
+          "partyRelationshipTypeId", context.get("partyRelationshipTypeId")));
+      partyRelationship = delegator.create(partyRelationship);
+    } catch (GenericEntityException e) {
       Debug.logError(e, MODULE);
       return ServiceUtil.returnError("Failed to create record " + MODULE);
     }

@@ -24,5 +24,8 @@ under the License.
         <menu-item name="SearchCustomers" title="Search Customers">
             <link target="SearchCustomers"/>
         </menu-item>
+        <menu-item name="CreateCustomerRelationship" title="Create Customer Relationship">
+            <link target="CreateCustomerRelationship"/>
+        </menu-item>
     </menu>
 </menus>

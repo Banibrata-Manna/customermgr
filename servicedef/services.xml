@@ -53,4 +53,20 @@ under the License.
         <attribute name="city" type="String" mode="IN" optional="true"/>
         <attribute name="postalCode" type="String" mode="IN" optional="true"/>
     </service>
+
+    <service name="createCustomerRelationship" engine="java"
+             location="com.hotwax.services.CustomerService"
+             invoke="createCustomerRelationship">
+        <attribute name="partyIdFrom" type="String" mode="IN"/>
+        <attribute name="partyIdTo" type="String" mode="IN"/>
+        <attribute name="partyRelationshipTypeId" type="String" mode="IN"/>
+    </service>
+
+    <service name="updateCustomerRelationship" engine="java"
+             location="com.hotwax.services.CustomerService"
+             invoke="updateCustomerRelationship">
+        <attribute name="partyIdFrom" type="String" mode="IN"/>
+        <attribute name="partyIdTo" type="String" mode="IN"/>
+        <attribute name="statusId" type="String" mode="IN"/>
+    </service>
 </services>

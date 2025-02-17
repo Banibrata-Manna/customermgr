@@ -34,7 +34,17 @@ under the License.
     <field name="submitButton" title="${uiLabelMap.CommonFind}"><submit button-type="button"/></field>
   </form>
 
-  <form name="listCustomerByFilters" type="list" >
+  <form name="CreateCustomerRelationship" type="single" target="createCustomerRelationship">
+    <field name="partyIdTo" entity-name="PartyRelationship" field-name="partyIdTo"/>
+    <field name="partyIdFrom" entity-name="PartyRelationship" field-name="partyIdFrom"/>
+    <field name="partyRelationshipTypeId" entity-name="PartyRelationship" field-name="partyRelationshipTypeId"/>
+    <field name="submitButton" title="${uiLabelMap.CommonAdd}"><submit button-type="button"/></field>
+  </form>
 
+  <form name="UpdateCustomerRelationship" type="single" target="updateCustomerRelationship">
+    <field name="partyIdTo" entity-name="PartyRelationship" field-name="partyIdTo"/>
+    <field name="partyIdFrom" entity-name="PartyRelationship" field-name="partyIdFrom"/>
+    <field name="statusId" entity-name="PartyRelationship" field-name="statusId"/>
+    <field name="submitButton" title="${uiLabelMap.CommonAdd}"><submit button-type="button"/></field>
   </form>
 </forms>

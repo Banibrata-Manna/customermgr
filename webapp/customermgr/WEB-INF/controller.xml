@@ -69,8 +69,31 @@ under the License.
         <event type="service" invoke="updateCustomer"/>
         <response name="success" type="view" value="UpdateCustomer"/>
     </request-map>
+    <request-map uri="CreateCustomerRelationship">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ManageCustomerRelationship"/>
+    </request-map>
+    <request-map uri="createCustomerRelationship">
+        <security auth="true" https="true"/>
+        <event type="service" invoke="createCustomerRelationship"/>
+        <response name="success" type="view" value="ManageCustomerRelationship"/>
+    </request-map>
+    <request-map uri="UpdateCustomerRelationship">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ManageCustomerRelationship"/>
+    </request-map>
+    <request-map uri="updateCustomerRelationship">
+        <security auth="true" https="true"/>
+        <event type="service" invoke="createCustomerRelationship"/>
+        <response name="success" type="view" value="ManageCustomerRelationship"/>
+    </request-map>
     <!-- View Mappings -->
-    <view-map name="main" type="screen" page="component://customermgr/widget/CustomermgrScreens.xml#main"/>
-    <view-map name="SearchCustomers" type="screen" page="component://customermgr/widget/CustomermgrScreens.xml#SearchCustomers"/>
-    <view-map name="UpdateCustomer" type="screen" page="component://customermgr/widget/CustomermgrScreens.xml#UpdateCustomer"/>
+    <view-map name="main" type="screen"
+              page="component://customermgr/widget/CustomermgrScreens.xml#main"/>
+    <view-map name="SearchCustomers" type="screen"
+              page="component://customermgr/widget/CustomermgrScreens.xml#SearchCustomers"/>
+    <view-map name="UpdateCustomer" type="screen"
+              page="component://customermgr/widget/CustomermgrScreens.xml#UpdateCustomer"/>
+    <view-map name="ManageCustomerRelationship" type="screen"
+              page="component://customermgr/widget/CustomermgrScreens.xml#ManageCustomerRelationship"/>
 </site-conf>
